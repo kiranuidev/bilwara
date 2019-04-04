@@ -1,7 +1,8 @@
 import React,{Component} from 'react';
 import Textbox from './Textbox';
 import SelectBox from './Selectbox';
-
+//import axios
+import axios from 'axios';
 class Register extends Component{
     constructor(props){
         super(props);
@@ -18,21 +19,51 @@ class Register extends Component{
     this.state={
         success:'User Registered Successfully',
         failure:'User Registration Failed',
-        register:{
-            FirstName:{...textControl,  
-                id:'txtFirstName',
-            name:'FirstName',
-            label:'Fist Name',
-            placeholder:'Enter First Name'},
-            LastName:{...textControl},
-            Age:{...textControl},
-            Country:{},
-        }
+        register :
+            {
+                FirstName:{...textControl,
+                    id:'txtFirstName',
+                    name:'FirstName',
+                    label:'Fist Name',
+                    placeholder:'Enter First Name'},
+                LastName:{...textControl,
+                        label:'Last Name',
+                        id:'txtLastName',
+                        name:'LastName',
+                        placeholder:'Enter Last Name'},
+                Age:{...textControl,
+                            label:'Age',
+                            id:'txtAge',
+                            name:'Age',
+                            placeholder:'Enter Age'},
+    
+                Country:{
+                    ...select,
+                    label:'Country',
+                            id:'ddlCountry',
+                            name:'Country',
+                            placeholder:'Select Country',
+                            options:[{text:'India',value:'IN'},
+                            {text:'United States',value:'USA'}]
+                }
+            }
     };
     this.textChange = this.textChange.bind(this);
 }
 componentDidMount(){
-    
+    axios.get('https://restcountries.eu/rest/v2/all')
+    .then(result=>{
+        console.log(result);
+        let countries = result.data.map(x=>{
+            return {value:x.alpha2Code,text:x.name}
+        });
+        let currentState = this.state;
+        currentState.register.Country.options= countries;
+        this.setState(currentState);
+    })
+    .catch(err=>{
+        console.log(err);
+    })
 }
 textChange(e){
     let currentState= this.state;
@@ -43,9 +74,9 @@ textChange(e){
     render(){
         return (<div className="form">
             <Textbox control={this.state.register.FirstName} textChange={this.textChange}/>
-            {/* <Textbox control={this.state.register.LastName} textChange={this.textChange}/>
+            <Textbox control={this.state.register.LastName} textChange={this.textChange}/>
             <Textbox control={this.state.register.Age} textChange={this.textChange}/>
-            <SelectBox control={this.state.register.Country} textChange={this.textChange}/> */}
+            <SelectBox control={this.state.register.Country} textChange={this.textChange}/>
           </div>
         )
     }
