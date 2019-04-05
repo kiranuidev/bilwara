@@ -1,9 +1,11 @@
 
-const reducer = (state = {}, action) => {
+const reducer = (state = {say:'How are u'}, action) => {
 
     switch (action.type) {
       case 'HELLO_REACT':
-        return { ...state, say : 'Hello World Redux'  };
+        return {  say : 'Hello World Redux'  };
+      case 'ADD_ITEM':
+      return {say : 'i AM aDDED' };
       default:
         return state;
     }

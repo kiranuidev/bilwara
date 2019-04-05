@@ -6,3 +6,6 @@
 export const sayHello = () => ({
     type: "HELLO_REACT"
 })
+export const addItem = () => ({
+    type: "ADD_ITEM"
+})
